@@ -3,6 +3,16 @@ entries:
   sfapp-helm:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2024-06-08T12:10:47.256988472Z"
+    description: A Helm chart for sf diploma application
+    digest: 4566dfa897f5aae309cc0fe918399c695354b2cbf391f81e8d7832da1204ae16
+    name: sfapp-helm
+    type: application
+    urls:
+    - https://github.com/MakarovS96/devops-helm/releases/download/sfapp-helm-0.1.1/sfapp-helm-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2024-06-08T10:26:31.36283827Z"
     description: A Helm chart for sf diploma application
     digest: 0f3805ddbc3330f4209114f2cdb2cd89d470d24f1b398cda2d4b4599b313ef56
@@ -11,4 +21,4 @@ entries:
     urls:
     - https://github.com/MakarovS96/devops-helm/releases/download/sfapp-helm-0.1.0/sfapp-helm-0.1.0.tgz
     version: 0.1.0
-generated: "2024-06-08T10:26:31.362893583Z"
+generated: "2024-06-08T12:10:47.257052933Z"
