@@ -43,8 +43,7 @@ spec:
               configMapKeyRef:
                 name: postgres-config-{{ .Release.Name }}
                 key: POSTGRES_PASSWORD
-      {{- if .Values.dockerSecret.enabled -}}
+      {{- if .Values.dockerSecret.enabled }}
       imagePullSecrets:
         - name: {{ .Values.dockerSecret.name }}
-      {{- end -}}
-
+      {{- end }}
