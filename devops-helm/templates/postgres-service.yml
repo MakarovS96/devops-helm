@@ -1,12 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres
-  namespace: sfdevops
+  name: postgres-service-{{ .Release.Name }}
   labels:
     app: postgres
 spec:
   ports:
-   - port: 5432
+   - port: {{ .Values.postgres.statefulset.port }}
   selector:
    app: postgres

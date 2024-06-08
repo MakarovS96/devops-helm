@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-db-{{ .Release.Name }}
+  labels:
+    {{- include "helm-chart.labels" . | nindent 4 }}
+spec:
+  serviceName: postgres-service-{{ .Release.Name }}
+  replicas: {{ .Values.postgres.statefulset.replicas }}
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: {{ .Values.postgres.statefulset.image }}
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: {{ .Values.postgres.statefulset.port }}
+          envFrom:
+            - configMapRef:
+                name: postgres-config-{{ .Release.Name }}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-pv-claim-{{ .Release.Name }}
+          resources:
+            limits:
+              memory: {{ .Values.postgres.statefulset.resources.limits.memory }}
+              cpu: {{ .Values.postgres.statefulset.resources.limits.cpu }}
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: postgres-pv-claim-{{ .Release.Name }}
+        labels:
+          app: postgres
+      spec:
+        storageClassName: manual
+        accessModes:
+          - ReadWriteMany
+        resources:
+          requests:
+            storage: {{ .Values.postgres.statefulset.resources.pvclaim.capacity }}
+
+

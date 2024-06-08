@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sfapp-{{ .Release.Name }}
+  labels:
+    {{- include "helm-chart.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.sfapp.deployment.replicas }}
+  selector:
+    matchLabels:
+      app: sfapp
+  template:
+    metadata:
+      labels:
+        app: sfapp
+    spec:
+      containers:
+      - name: sfapp
+        image: {{ .Values.sfapp.deployment.image }}
+        imagePullPolicy: "IfNotPresent"
+        command: ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:{{ .Values.sfapp.deployment.port }}"]
+        resources:
+          limits:
+            memory: {{ .Values.sfapp.deployment.resources.limits.memory }}
+            cpu: {{ .Values.sfapp.deployment.resources.limits.cpu }}
+        ports:
+        - containerPort: {{ .Values.sfapp.deployment.port }}
+        env:
+          - name: DB_HOST
+            value: postgres-service-{{ .Release.Name }}
+          - name: DB_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config-{{ .Release.Name }}
+                key: POSTGRES_DB
+          - name: DB_USER
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config-{{ .Release.Name }}
+                key: POSTGRES_USER
+          - name: DB_PASS
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config-{{ .Release.Name }}
+                key: POSTGRES_PASSWORD
+      {{- if .Values.dockerSecret.enabled -}}
+      imagePullSecrets:
+        - name: {{ .Values.dockerSecret.name }}
+      {{- end -}}
+
