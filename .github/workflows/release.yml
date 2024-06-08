@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - 'devops-helm/**'
+      - 'charts/**'
 
 jobs:
   release:
